@@ -106,14 +106,19 @@ FROM
         condition = " AND ".join(where)
         stmt += f"WHERE {condition}"
 
+    if max_cache_expires is not None:
+        athena_cache_settings = {
+            "max_cache_seconds": max_cache_expires,
+        }
+    else:
+        athena_cache_settings = None
+
     df = awswrangler.athena.read_sql_query(
         stmt,
         database=glue_db_name,
         boto3_session=boto3_session,
         ctas_approach=ctas_approach,
-        athena_cache_settings={
-            "max_cache_seconds": max_cache_expires,
-        },
+        athena_cache_settings=athena_cache_settings,
     )
 
     df["dt"] = pd.to_datetime(df["dt"])
