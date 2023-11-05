@@ -67,7 +67,7 @@ def query(
     boto3_session,
     glue_db_name: str,
     table_name: str,
-    field: str,
+    fields: Optional[List[str]] = None,
     symbols: Optional[List[str]] = None,
     start_dt: Optional[str] = None,
     end_dt: Optional[str] = None,
@@ -93,9 +93,11 @@ def query(
 
         where += [f"symbol in ({predicated})"]
 
+    fields_str = ", \n    ".join(fields)
+
     stmt = f"""
 SELECT 
-    {field}, 
+    {fields_str}, 
     symbol, 
     dt
 FROM
@@ -123,4 +125,4 @@ FROM
 
     df["dt"] = pd.to_datetime(df["dt"])
 
-    return df.set_index(["dt", "symbol"])[field].unstack().sort_index()
+    return df.set_index(["dt", "symbol"])[fields].unstack().sort_index()

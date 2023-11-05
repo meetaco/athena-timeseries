@@ -48,7 +48,7 @@ Here is the example to query data. You can enjoy time series resampling operatio
 # Query for raw data.
 raw_clsoe = tsdb.query(
     table_name='example_table',
-    field='close',
+    fields=['open', 'close'],
     start_dt='2022-02-01 00:00:00', # yyyy-mm-dd HH:MM:SS, inclusive
     end_dt='2022-02-05 23:59:59', # yyyy-mm-dd HH:MM:SS, inclusive
     symbols=['BTCUSDT'],
